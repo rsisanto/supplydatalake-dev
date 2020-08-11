@@ -1,0 +1,328 @@
+{
+	"name": "Segambev_PZ_CondicaoInsegura_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Segambev_PZ_CondicaoInsegura_PPL",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Copy_Segambev_CondicaoInsegura",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Brasil/Segambev/Condicao insegura/Segambev_PZ_CondicaoInsegura_DB"
+				},
+				"linkedServiceName": {
+					"referenceName": "SupplyDatabricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Delete_temp_condicaoinsegura",
+				"type": "Delete",
+				"dependsOn": [
+					{
+						"activity": "Segambev_PZ_CondicaoInsegura_PPL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "Delete_temp_CondicaoInsegura",
+						"type": "DatasetReference"
+					},
+					"logStorageSettings": {
+						"linkedServiceName": {
+							"referenceName": "BlobPlatform",
+							"type": "LinkedServiceReference"
+						},
+						"path": "prelandingzone/Brazil/Segambev/CondicaoInsegura/tempblob"
+					},
+					"enableLogging": true,
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"recursive": true
+					}
+				}
+			},
+			{
+				"name": "Copy_Segambev_CondicaoInsegura",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "MySqlSource",
+						"query": {
+							"value": "SELECT\n               ATO_ID,\n               ATO_UNIDADE_TEXT,\n               DATE_FORMAT(ATO_DT_INICIO, '%Y-%m-%d %H:%i:%s') as ATO_DT_INICIO,\n               ATO_QUEM_REPORTOU,\n               ATO_PLATAFORMA_ORIGEM,\n               USU_ID,\n               ARE_ID,\n               EQP_ID,\n               ATO_EQUIPAMENTO,\n               ATO_DESCRICAO_EVENTO,\n               ATO_SAP_COD,\nDATE_FORMAT(ATO_DT_CRIACAO, '%Y-%m-%d %H:%i:%s') as ATO_DT_CRIACAO, DATE_FORMAT(ATO_DT_ATUALIZACAO, '%Y-%m-%d %H:%i:%s') as ATO_DT_ATUALIZACAO,\n               ATO_SBCJ_ID,\n               ATO_SBCJ_DESCRICAO,\n               ATO_TPOC,\n               CTR_ID,\n               TAR_DESCRICAO_PT,\n               SIN_DESCRICAO_PT,\n               SIN_CODIGO_SAP,\n               EQU_DESCRICAO_PT,\n               EQU_CODIGO_SAP,\n               MUNDO\nFROM \n               VW_LISTA_OCORRENCIAS_CONDICAO_INSEGURA\nWHERE ATO_DT_INICIO >= DATE_ADD(CURRENT_DATE, INTERVAL -15 DAY);",
+							"type": "Expression"
+						}
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings",
+							"quoteAllText": true
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "ATO_ID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "ID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "ATO_UNIDADE_TEXT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDADE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ATO_DT_INICIO",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "DATA_INICIO",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ATO_QUEM_REPORTOU",
+									"type": "String"
+								},
+								"sink": {
+									"name": "QUEM_REPORTOU",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ATO_PLATAFORMA_ORIGEM",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PLATAFORMA_ORIGEM",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "USU_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "USUARIO_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ARE_ID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "ID_AREA",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "EQP_ID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "EQUIPAMENTO_ID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "ATO_EQUIPAMENTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "EQUIPAMENTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ATO_DESCRICAO_EVENTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DESCRICAO_EVENTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ATO_SAP_COD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SAP_COD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ATO_DT_CRIACAO",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "DATA_CRIACAO",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ATO_DT_ATUALIZACAO",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "DATA_ATUALIZACAO",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ATO_SBCJ_ID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "SUB_CONJUNTO_ID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "ATO_SBCJ_DESCRICAO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SUB_CONJUNTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "sin_descricao_pt",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SUB_AREA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "sin_codigo_sap",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SUB_AREA_COD_SAP",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "equ_descricao_pt",
+									"type": "String"
+								},
+								"sink": {
+									"name": "EQUIPAMENTO_DESC",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "equ_codigo_sap",
+									"type": "String"
+								},
+								"sink": {
+									"name": "EQUIPAMENTO_COD_SAP",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "MUNDO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "MUNDO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Segambev_CondicaoInsegura_DTS",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Segambev_CondicaoInsegura_DTS",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "Brazil/Segambev/Condição Insegura"
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-07-10T14:02:01Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

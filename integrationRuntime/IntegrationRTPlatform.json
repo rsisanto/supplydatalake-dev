@@ -1,0 +1,12 @@
+{
+	"name": "IntegrationRTPlatform",
+	"properties": {
+		"type": "SelfHosted",
+		"typeProperties": {
+			"linkedInfo": {
+				"resourceId": "/subscriptions/d33a4ccf-4568-41fc-8b2d-3d920a88486e/resourcegroups/AMBEV-ANALYTICS-NONPROD/providers/Microsoft.DataFactory/factories/INTEGRATION-RT-DATAFACTORY/integrationruntimes/INTEGRATION-RT-ANALYTICS-BR-NONPROD",
+				"authorizationType": "Rbac"
+			}
+		}
+	}
+}

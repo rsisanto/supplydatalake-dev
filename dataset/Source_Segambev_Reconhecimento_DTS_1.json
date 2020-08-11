@@ -1,0 +1,16 @@
+{
+	"name": "Source_Segambev_Reconhecimento_DTS_1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SupplySegambev",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Brazil/Segambev/Reconhecimento"
+		},
+		"annotations": [],
+		"type": "MySqlTable",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

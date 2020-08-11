@@ -1,0 +1,74 @@
+{
+	"name": "Segambev_FluxoDeConsequencia_DM",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SupplySQLDM",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Brazil/Segambev/Fluxo de Consequência"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "DATA_CRIACAO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DATA_ATUALIZACAO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CLASSIFICACAO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "USUARIO_ID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "FUNCIONARIO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DESCRICAO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "UNIDADE",
+				"type": "nvarchar"
+			},
+			{
+				"name": "AREA",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ACAO_TOMADA",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DATA_FINAL",
+				"type": "nvarchar"
+			},
+			{
+				"name": "OBSERVACAO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CREATED_DATE_IN_LAKE",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "Segambev",
+			"table": "FluxoDeConsequencia"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,20 @@
+{
+	"name": "SupplyDatabricks",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureDatabricks",
+		"typeProperties": {
+			"domain": "https://adb-3756611706134949.9.azuredatabricks.net",
+			"accessToken": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "KeyVault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "SupplyTokenDB"
+			},
+			"existingClusterId": "0609-122523-ours791"
+		}
+	}
+}

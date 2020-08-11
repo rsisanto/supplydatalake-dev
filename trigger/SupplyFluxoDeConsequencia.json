@@ -1,0 +1,24 @@
+{
+	"name": "SupplyFluxoDeConsequencia",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "Segambev_FluxoDeConsequencia_PPL",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Minute",
+				"interval": 180,
+				"startTime": "2020-07-08T16:18:00Z",
+				"timeZone": "UTC"
+			}
+		}
+	}
+}

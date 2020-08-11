@@ -1,0 +1,97 @@
+{
+	"name": "Segambev_Reconhecimento_DM",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SupplySQLDM",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Brazil/Segambev/Reconhecimento"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "DATA",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "TURNO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "UNIDADE",
+				"type": "nvarchar"
+			},
+			{
+				"name": "AREA",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SUB_AREA",
+				"type": "nvarchar"
+			},
+			{
+				"name": "USUARIO_ID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "USUARIO_NOME",
+				"type": "nvarchar"
+			},
+			{
+				"name": "USUARIO_TERCEIRO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "USUARIO_TERCEIRO_",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DESCRICAO_EVENTO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "IMAGEM",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "QUEM_REPORTOU_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "QUEM_REPORTOU",
+				"type": "nvarchar"
+			},
+			{
+				"name": "JOB_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CARGO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PLATAFORMA_ORIGEM",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CREATED_DATE_IN_LAKE",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "Segambev",
+			"table": "Reconhecimento"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

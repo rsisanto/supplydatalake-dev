@@ -1,0 +1,106 @@
+{
+	"name": "Segambev_CondicaoInsegura_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Execute_Segambev_PZ_CondicaoInsegura_PPL",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Execute_Init_CondicaoInsegura_PPL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Segambev_PZ_CondicaoInsegura_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Execute_PZ_HZ_CondicaoInsegura_PPL",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Execute_Segambev_PZ_CondicaoInsegura_PPL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "PZ_HZ_CondicaoInsegura_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Execute_HZ_CZ_CondicaoInsegura_PPL",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Execute_PZ_HZ_CondicaoInsegura_PPL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "HZ_CZ_CondicaoInsegura_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Execute_CZ_DM_CondicaoInsegura_PPL",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Execute_HZ_CZ_CondicaoInsegura_PPL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "CZ_DM_CondicaoInsegura_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Execute_Init_CondicaoInsegura_PPL",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Init_CondicaoInsegura_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "Brazil/Segambev/Condição Insegura"
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-06-18T20:09:13Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

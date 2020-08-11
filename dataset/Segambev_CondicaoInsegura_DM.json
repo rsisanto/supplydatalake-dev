@@ -1,0 +1,125 @@
+{
+	"name": "Segambev_CondicaoInsegura_DM",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SupplySQLDM",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Brazil/Segambev/Condição Insegura"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "UNIDADE",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DATA_INICIO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "QUEM_REPORTOU",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PLATAFORMA_ORIGEM",
+				"type": "nvarchar"
+			},
+			{
+				"name": "USUARIO_ID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SUPERVISOR",
+				"type": "nvarchar"
+			},
+			{
+				"name": "GERENTE",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ID_AREA",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FOTO",
+				"type": "varbinary"
+			},
+			{
+				"name": "EQUIPAMENTO_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "EQUIPAMENTO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DESCRICAO_EVENTO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SAP_COD",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DATA_CRIACAO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DATA_ATUALIZACAO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SUB_CONJUNTO_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SUB_CONJUNTO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "FUNCIONARIO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SUB_AREA",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SUB_AREA_COD_SAP",
+				"type": "nvarchar"
+			},
+			{
+				"name": "EQUIPAMENTO_DESC",
+				"type": "nvarchar"
+			},
+			{
+				"name": "EQUIPAMENTO_COD_SAP",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MUNDO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CREATED_DATE_IN_LAKE",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "Segambev",
+			"table": "CondicaoInsegura"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,33 @@
+{
+	"name": "CZ_DM_Incidente_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "CZ_DM_Incidente_DB",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Brasil/Segambev/Incidente/CZ_DM_Incidente_DB"
+				},
+				"linkedServiceName": {
+					"referenceName": "SupplyDatabricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"folder": {
+			"name": "Brazil/Segambev/Incidentes"
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-07-08T16:15:02Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

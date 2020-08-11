@@ -1,0 +1,22 @@
+{
+	"name": "Sink_Segambev_AtosInseguros_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "BlobPlatform",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Brazil/Segambev/Atos Inseguros"
+		},
+		"annotations": [],
+		"type": "Avro",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "Brazil/Segambev/AtosInseguros/tempblob",
+				"container": "prelandingzone"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

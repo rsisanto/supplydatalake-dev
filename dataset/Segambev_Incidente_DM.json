@@ -1,0 +1,111 @@
+{
+	"name": "Segambev_Incidente_DM",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SupplySQLDM",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Brazil/Segambev/Incidentes"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "DATA_REGISTRO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "TURNO_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ID_USUARIO",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NOME_USUARIO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DESCRICAO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DATA_CRIACAO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DATA_ATUALIZACAO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ID_AREA",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SUBAREA_RH",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "PLATAFORMA_ORIGEM",
+				"type": "nvarchar"
+			},
+			{
+				"name": "QUEM_REPORTOU",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "MUNDO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "UNIDADE",
+				"type": "nvarchar"
+			},
+			{
+				"name": "REGIONAL",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LOCAL",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LINHA",
+				"type": "nvarchar"
+			},
+			{
+				"name": "TURNO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "AREA",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CAUSA_FUNDAMENTAL",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CREATED_DATE_IN_LAKE",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "Segambev",
+			"table": "Incidente"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

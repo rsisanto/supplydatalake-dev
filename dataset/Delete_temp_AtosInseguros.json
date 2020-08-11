@@ -1,0 +1,22 @@
+{
+	"name": "Delete_temp_AtosInseguros",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "BlobPlatform",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Brazil/Segambev/Atos Inseguros"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "Brazil/Segambev/AtosInseguros/tempblob",
+				"container": "prelandingzone"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,16 @@
+{
+	"name": "Source_Segambev_AtosInseguros_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SupplySegambev",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Brazil/Segambev/Atos Inseguros"
+		},
+		"annotations": [],
+		"type": "MySqlTable",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

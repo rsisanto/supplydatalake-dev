@@ -1,0 +1,22 @@
+{
+	"name": "Sink_Segambev_FluxoDeConsequencia_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "BlobPlatform",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Brazil/Segambev/Fluxo de Consequência"
+		},
+		"annotations": [],
+		"type": "Avro",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "Brazil/Segambev/FluxoDeConsequencia/tempblob",
+				"container": "prelandingzone"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,22 @@
+{
+	"name": "Delete_temp_Reconhecimento",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "BlobPlatform",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Brazil/Segambev/Reconhecimento"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "Brazil/Segambev/Reconhecimento/tempblob",
+				"container": "prelandingzone"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

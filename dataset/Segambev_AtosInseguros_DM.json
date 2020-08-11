@@ -1,0 +1,118 @@
+{
+	"name": "Segambev_AtosInseguros_DM",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SupplySQLDM",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Brazil/Segambev/Atos Inseguros"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "DATA_INICIO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DATA_ATUALIZACAO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "TURNO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "FUNCIONARIO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "USUARIO_TERCEIRO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SUPERVISOR",
+				"type": "nvarchar"
+			},
+			{
+				"name": "GERENTE",
+				"type": "nvarchar"
+			},
+			{
+				"name": "UNIDADE",
+				"type": "nvarchar"
+			},
+			{
+				"name": "AREA",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SUB_AREA",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LINHA",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DESCRICAO_DO_ATO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ABORDAGEM_POSITIVA",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ESPECIFIQUE",
+				"type": "nvarchar"
+			},
+			{
+				"name": "BLOCO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DESCRICAO_DO_EVENTO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "STATUS",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ID_QUEM_REPORTOU",
+				"type": "nvarchar"
+			},
+			{
+				"name": "NOME_QUEM_REPORTOU",
+				"type": "nvarchar"
+			},
+			{
+				"name": "JOB_ID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CARGO_QUEM_REPORTOU",
+				"type": "nvarchar"
+			},
+			{
+				"name": "JUSTIFICA_ARQUIVAMENTO",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CREATED_DATE_IN_LAKE",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "Segambev",
+			"table": "AtosInseguros"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

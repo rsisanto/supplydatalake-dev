@@ -1,0 +1,16 @@
+{
+	"name": "Source_Segambev_CondicaoInsegura_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SupplySegambev",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Brazil/Segambev/Condição Insegura"
+		},
+		"annotations": [],
+		"type": "MySqlTable",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

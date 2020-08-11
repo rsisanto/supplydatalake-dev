@@ -1,0 +1,258 @@
+{
+	"name": "Segambev_PZ_Reconhecimento_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Segambev_PZ_Reconhecimento_DB",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Copy_Segambev_Reconhecimento",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Brasil/Segambev/Reconhecimento/Segambev_PZ_Reconhecimento_DB"
+				},
+				"linkedServiceName": {
+					"referenceName": "SupplyDatabricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Copy_Segambev_Reconhecimento",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "MySqlSource",
+						"query": {
+							"value": "SELECT\nDATE_FORMAT(REC_DATA, '%Y-%m-%d %H:%i:%s') as REC_DATA, REC_ID,\n      TJD.TJD_DESCRICAO AS TURNO,\n      UNI.DESCRICAO AS UNIDADE,\n      ARG.ARG_DESCRICAO AS AREA,\n      SBA.ARE_DESCRICAO AS SUBAREA,\n      REC_USU_ID,\n      REC_USU_TERCEIRO,\n      (CASE REC_USU_TERCEIRO  WHEN 1 THEN 'SIM' ELSE 'NAO' END) AS REC_USU_TERCEIRO_,\n      REC_DESCRICAO_EVENTO,\n      REC_QUEM_REPORTOU_ID,\n      RECONHECIMENTO.JOB_ID,\n      JOB.DENOMINACAO_OBJ AS CARGO,\n      REC_PLATAFORMA_ORIGEM\nFROM\n      RECONHECIMENTO\nJOIN\n      AREA AS ARG\nON \n      ARG.ARG_ID = RECONHECIMENTO.ARE_ID\nJOIN\n      TURNO_JORNADA AS TJD\nON\n      RECONHECIMENTO.TJD_ID = TJD.TJD_ID\nJOIN\n      VW_UNIDADES_PORTALGENTE_MUNDO AS UNI\nON\n      RECONHECIMENTO.REC_UNIDADE_ID = UNI.SUBAREA_RH\nLEFT JOIN\n      SUB_AREA AS SBA\nON\n      RECONHECIMENTO.REC_SUBAREA_ID = SBA.ARE_ID\nLEFT JOIN\n      VW_DADOS_FUNCIONARIO_REPORT AS JOB\nON\n      JOB.NUMERO_PESSOAL = RECONHECIMENTO.REC_QUEM_REPORTOU_ID\nWHERE\n      REC_DATA >= DATE_ADD(CURRENT_DATE, INTERVAL -15 DAY);\n\n",
+							"type": "Expression"
+						}
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings",
+							"quoteAllText": true
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "REC_DATA",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "DATA",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "REC_ID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "ID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "TURNO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TURNO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UNIDADE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDADE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "AREA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "AREA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SUBAREA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SUBAREA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "REC_USU_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "USUARIO_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "REC_USU_TERCEIRO_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "USUARIO_TERCEIRO_",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "REC_DESCRICAO_EVENTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DESCRICAO_EVENTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "REC_QUEM_REPORTOU_ID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "QUEM_REPORTOU_ID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "JOB_ID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "JOB_ID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "CARGO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CARGO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "REC_PLATAFORMA_ORIGEM",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PLATAFORMA_ORIGEM",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Segambev_Reconhecimento_DTS_1",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Segambev_Reconhecimento_DTS",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Delete_temp",
+				"type": "Delete",
+				"dependsOn": [
+					{
+						"activity": "Segambev_PZ_Reconhecimento_DB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "Delete_temp_Reconhecimento",
+						"type": "DatasetReference"
+					},
+					"logStorageSettings": {
+						"linkedServiceName": {
+							"referenceName": "BlobPlatform",
+							"type": "LinkedServiceReference"
+						},
+						"path": "prelandingzone/Brazil/Segambev/Reconhecimento/tempblob"
+					},
+					"enableLogging": true,
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"recursive": true
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Brazil/Segambev/Reconhecimento"
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-07-10T14:02:01Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

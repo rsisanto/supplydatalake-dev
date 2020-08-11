@@ -1,0 +1,295 @@
+{
+	"name": "Segambev_PZ_Incidente_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Segambe_PZ_Incidente_DB",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Copy_Segambev_Incidentes",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Brasil/Segambev/Incidente/Segambev_PZ_Incidente_DB"
+				},
+				"linkedServiceName": {
+					"referenceName": "SupplyDatabricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Copy_Segambev_Incidentes",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "MySqlSource",
+						"query": {
+							"value": "select \n\tINC_ID,\n\tDATE_FORMAT(INC_DT_REGISTRO, '%Y-%m-%d %H:%i:%s') as INC_DT_REGISTRO,\n\tTJD_ID,\n\tUSU_ID,\n\tARE_ID,\n\tLIN_ID,\n\tINC_DESCRICAO,\n\tDATE_FORMAT(INC_DT_CRIACAO, '%Y-%m-%d %H:%i:%s') as INC_DT_CRIACAO,\n\tDATE_FORMAT(INC_DT_ATUALIZACAO, '%Y-%m-%d %H:%i:%s') as INC_DT_ATUALIZACAO,\n\tARG_ID,\n\tSUBAREA_RH,\n\tINC_PLATAFORMA_ORIGEM,\n\tINC_QUEM_REPORTOU,\n\tCIN_ID,\n\tPTF_IDS,\n\tMUNDO,\n\tDESCRICAO,\n\tREGIONAL,\n\tcase \n\t\twhen (are_descricao is not null and LIN_DESCRICAO is null) then are_descricao \n\t\twhen (are_descricao is null and LIN_DESCRICAO is not null) then LIN_DESCRICAO \n\t\twhen (are_descricao is not null and LIN_DESCRICAO is not null) then concat(are_descricao,lin_descricao) \n\telse \n\t\tnull \n\tend as SUBAREA,\n\tTJD_DESCRICAO,\n\tARG_DESCRICAO,\n\tCIN_DESCRICAO\nFROM\n\tVW_LISTA_INCIDENTES_MUNDO\nwhere\n      INC_DT_REGISTRO >= DATE_ADD(CURRENT_DATE, INTERVAL -15 DAY);\n\n",
+							"type": "Expression"
+						}
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings",
+							"quoteAllText": true
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "INC_ID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "ID"
+								}
+							},
+							{
+								"source": {
+									"name": "INC_DT_REGISTRO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DATA_REGISTRO"
+								}
+							},
+							{
+								"source": {
+									"name": "TJD_ID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "TURNO_ID"
+								}
+							},
+							{
+								"source": {
+									"name": "USU_ID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "ID_REPORTADO"
+								}
+							},
+							{
+								"source": {
+									"name": "INC_DESCRICAO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DESCRICAO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "INC_DT_CRIACAO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DATA_CRIACAO"
+								}
+							},
+							{
+								"source": {
+									"name": "INC_DT_ATUALIZACAO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DATA_ATUALIZACAO"
+								}
+							},
+							{
+								"source": {
+									"name": "ARG_ID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "ID_AREA"
+								}
+							},
+							{
+								"source": {
+									"name": "SUBAREA_RH",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "SUBAREA_RH",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "INC_PLATAFORMA_ORIGEM",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PLATAFORMA_ORIGEM"
+								}
+							},
+							{
+								"source": {
+									"name": "INC_QUEM_REPORTOU",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "QUEM_REPORTOU"
+								}
+							},
+							{
+								"source": {
+									"name": "MUNDO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "MUNDO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DESCRICAO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDADE"
+								}
+							},
+							{
+								"source": {
+									"name": "REGIONAL",
+									"type": "String"
+								},
+								"sink": {
+									"name": "REGIONAL",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SUBAREA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SUBAREA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TJD_DESCRICAO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TURNO"
+								}
+							},
+							{
+								"source": {
+									"name": "ARG_DESCRICAO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "AREA"
+								}
+							},
+							{
+								"source": {
+									"name": "CIN_DESCRICAO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAUSA_FUNDAMENTAL"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Segambev_Incidentes_DTS_1",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Segambev_Incidente_DTS",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Delete_temp",
+				"type": "Delete",
+				"dependsOn": [
+					{
+						"activity": "Segambe_PZ_Incidente_DB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "Delete_temp_Incidente",
+						"type": "DatasetReference"
+					},
+					"logStorageSettings": {
+						"linkedServiceName": {
+							"referenceName": "BlobPlatform",
+							"type": "LinkedServiceReference"
+						},
+						"path": "prelandingzone/Brazil/Segambev/Incidentes/tempblob"
+					},
+					"enableLogging": true,
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"recursive": true
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Brazil/Segambev/Incidentes"
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-07-10T14:02:01Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

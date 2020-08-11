@@ -1,0 +1,238 @@
+{
+	"name": "Segambev_PZ_FluxoDeConsequencia_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy_Segambev_fluxoDeConsequencia",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "MySqlSource",
+						"query": {
+							"value": "SELECT      \n      ATO.ATO_ID,\nDATE_FORMAT(ATO.ATO_DT_CRIACAO, '%Y-%m-%d %H:%i:%s') as ATO_DT_CRIACAO,\nDATE_FORMAT(ATO.ATO_DT_ATUALIZACAO, '%Y-%m-%d %H:%i:%s') as ATO_DT_ATUALIZACAO,\nTPOC.TPOC_DESCRICAO AS TPOC_DESCRICAO,\n      ATO.USU_ID AS USU_ID,\n      TPA.TPA_DESCRICAO AS TPA_DESCRICAO,\n      ATO.ATO_UNIDADE_TEXT AS ATO_UNIDADE_TEXT,\n      ARG.ARG_DESCRICAO AS ARG_DESCRICAO,\n      TAC.TAC_DESCRICAO AS TAC_DESCRICAO,\n      ATO.ATO_DT_FIM AS ATO_DT_FIM,\n      ATO.ATO_OBSERVACAO AS ATO_OBSERVACAO\nFROM\n      ATO\nJOIN\n      TIPO_OCORRENCIA AS TPOC\nON\n      TPOC.TPOC_ID = ATO.ATO_TPOC\nJOIN\n      AREA AS ARG\nON\n      ARG.ARG_ID = ATO.ARG_ID\nJOIN\n      TIPO_ATO AS TPA\nON\n      ATO.TPA_ID = TPA.TPA_ID\nLEFT JOIN\n      TIPO_ACAO AS TAC\nON\n      ATO.TAC_ID = TAC.TAC_ID\nWHERE\n      ATO_DT_CRIACAO >= DATE_ADD(CURRENT_DATE, INTERVAL -15 DAY);\n",
+							"type": "Expression"
+						}
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings",
+							"quoteAllText": true
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "ATO_ID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "ID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "ATO_DT_CRIACAO",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "DATA_CRIACAO",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ATO_DT_ATUALIZACAO",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "DATA_ATUALIZACAO",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "TPOC_DESCRICAO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASSIFICACAO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "USU_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "USUARIO_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TPA_DESCRICAO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DESCRICAO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ATO_UNIDADE_TEXT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDADE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ARG_DESCRICAO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "AREA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TAC_DESCRICAO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ACAO_TOMADA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ATO_DT_FIM",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "DATA_FINAL",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ATO_OBSERVACAO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "OBSERVACAO",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Segambev_FluxoDeConsequencia_DTS_1",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Segambev_FluxoDeConsequencia_DTS",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Segambev_PZ_FluxoDeConsequencia_DB",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Copy_Segambev_fluxoDeConsequencia",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Brasil/Segambev/Fluxo de consequencia/Segambev_PZ_FluxoDeConsequencia_DB"
+				},
+				"linkedServiceName": {
+					"referenceName": "SupplyDatabricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Delete_temp",
+				"type": "Delete",
+				"dependsOn": [
+					{
+						"activity": "Segambev_PZ_FluxoDeConsequencia_DB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "Delete_temp_FluxoDeConsequencia",
+						"type": "DatasetReference"
+					},
+					"logStorageSettings": {
+						"linkedServiceName": {
+							"referenceName": "BlobPlatform",
+							"type": "LinkedServiceReference"
+						},
+						"path": "prelandingzone/Brazil/Segambev/FluxoDeConsequencia/tempblob"
+					},
+					"enableLogging": true,
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"recursive": true
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Brazil/Segambev/Fluxo de Consequência"
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-07-10T14:02:01Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,16 @@
+{
+	"name": "Source_Segambev_Incidentes_DTS_1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SupplySegambev",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Brazil/Segambev/Incidentes"
+		},
+		"annotations": [],
+		"type": "MySqlTable",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
