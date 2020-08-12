@@ -1,0 +1,309 @@
+{
+	"name": "Mes_PZ_Centro_Trabalho_I_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Segambev_PZ_AtosInseguros_DB",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Copy_Centro_Trabalho_I",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Brasil/Segambev/Atos Inseguros/Segambev_PZ_AtosInseguros_DB"
+				},
+				"linkedServiceName": {
+					"referenceName": "SupplyDatabricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Delete_temp_AtosInseguros",
+				"type": "Delete",
+				"dependsOn": [
+					{
+						"activity": "Segambev_PZ_AtosInseguros_DB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "Delete_temp_AtosInseguros",
+						"type": "DatasetReference"
+					},
+					"logStorageSettings": {
+						"linkedServiceName": {
+							"referenceName": "BlobPlatform",
+							"type": "LinkedServiceReference"
+						},
+						"path": "prelandingzone/Brazil/Segambev/AtosInseguros/tempblob"
+					},
+					"enableLogging": true,
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"recursive": true
+					}
+				}
+			},
+			{
+				"name": "Copy_Centro_Trabalho_I",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "MySqlSource",
+						"query": {
+							"value": "SELECT      \n      ATO.ATO_ID,\n      DATE_FORMAT(\nATO.ATO_DT_INICIO, '%Y-%m-%d %H:%i:%s') as ATO_DT_INICIO, DATE_FORMAT(ATO.ATO_DT_ATUALIZACAO, '%Y-%m-%d %H:%i:%s') as ATO_DT_ATUALIZACAO, \n      COALESCE(REPLACE(TJD.TJD_DESCRICAO, ';', ''), '-') AS TJD_DESCRICAO,\n      (CASE ATO.ATO_USU_TERCEIRO  WHEN 1 THEN 'SIM' ELSE 'NAO' END) AS ATO_USU_TERCEIRO, ATO.USU_ID,\n      COALESCE(REPLACE(ATO.ATO_UNIDADE_TEXT, ';', ''), '-') AS ATO_UNIDADE_TEXT,\n      COALESCE(REPLACE(ARG.ARG_DESCRICAO, ';', ''), '-') AS ARG_DESCRICAO,\n      COALESCE(REPLACE(SBA.ARE_DESCRICAO, ';', ''), '-') AS ARE_DESCRICAO,\n      COALESCE(REPLACE(LIN.LIN_DESCRICAO, ';', ''), '-') AS LIN_DESCRICAO,\n      COALESCE(REPLACE(TPA.TPA_DESCRICAO, ';', ''), '-') AS TPA_DESCRICAO,\n      (CASE ATO.ATO_FUNCIONARIO_ORIENTADO WHEN 1 THEN 'SIM' ELSE 'NAO' END) AS ATO_FUNCIONARIO_ORIENTADO,\n      COALESCE(REPLACE(ATO.ATO_ESPECIFIQUE, ';', ''), '-') AS ATO_ESPECIFIQUE,\n      COALESCE(REPLACE(BLC.BLC_DESCRICAO, ';', ''), '-') AS BLC_DESCRICAO,\n      COALESCE(REPLACE(ATO.ATO_DESCRICAO_EVENTO, ';', ''), '-') AS ATO_DESCRICAO_EVENTO,\n      COALESCE(REPLACE(ATS.ATS_DESCRICAO, ';', ''), '-') AS ATS_DESCRICAO,\n      COALESCE(REPLACE(ATO.ATO_QUEM_REPORTOU, ';', ''), '-') AS ATO_QUEM_REPORTOU,\n      COALESCE(REPLACE(ATO.JOB_ID, ';', ''), '-') AS JOB_ID,\n      (CASE ATO.IS_USER_TERCEIRO WHEN 1 THEN REPLACE(ATO.EMPRESA_TERCEIRO, ';', '') ELSE REPLACE(D.DENOMINACAO_OBJ, ';', '') END) AS DENOMINACAO_OBJ,\n      COALESCE(REPLACE(ATO.ATO_JUSTIFICA_ARQUIVAMENTO, ';', ''), '-') AS ATO_JUSTIFICA_ARQUIVAMENTO\nFROM\n      ATO\nJOIN \n      AREA AS ARG\nON \n      ARG.ARG_ID = ATO.ARG_ID\nJOIN\n      ATO_STATUS AS ATS\nON\n      ATO.ATS_ID = ATS.ATS_ID\nJOIN\n      TURNO_JORNADA AS TJD\nON\n      ATO.TJD_ID = TJD.TJD_ID\nJOIN\n      VW_UNIDADES_PORTALGENTE_MUNDO AS VUPM\nON\n      ATO.ATO_UNIDADE_ID = VUPM.SUBAREA_RH\nLEFT JOIN\n      SUB_AREA AS SBA\nON\n      ATO.ARE_ID = SBA.ARE_ID\nLEFT JOIN\n      TIPO_ATO AS TPA\nON\n      ATO.TPA_ID = TPA.TPA_ID\nLEFT JOIN\n      LINHA AS LIN\nON\n      ATO.LIN_ID = LIN.LIN_ID\nLEFT JOIN\n      BLOCO AS BLC\nON    \n      ATO.BLC_ID = BLC.BLC_ID\nLEFT JOIN\n      VW_DADOS_FUNCIONARIO_REPORT AS D\nON\n      D.NUMERO_PESSOAL = ATO.ATO_QUEM_REPORTOU\nWHERE\n      ATO.ATO_TPOC = 1 AND ATO_DT_INICIO >= DATE_ADD(CURRENT_DATE, INTERVAL -15 DAY)",
+							"type": "Expression"
+						}
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings",
+							"quoteAllText": true
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "ATO_ID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "ID"
+								}
+							},
+							{
+								"source": {
+									"name": "ATO_DT_INICIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DATA_INICIO"
+								}
+							},
+							{
+								"source": {
+									"name": "ATO_DT_ATUALIZACAO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DATA_ATUALIZACAO"
+								}
+							},
+							{
+								"source": {
+									"name": "TJD_DESCRICAO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TURNO"
+								}
+							},
+							{
+								"source": {
+									"name": "ATO_USU_TERCEIRO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "USUARIO_TERCEIRO"
+								}
+							},
+							{
+								"source": {
+									"name": "USU_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ID_REPORTADO"
+								}
+							},
+							{
+								"source": {
+									"name": "ATO_UNIDADE_TEXT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UNIDADE"
+								}
+							},
+							{
+								"source": {
+									"name": "ARG_DESCRICAO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "AREA"
+								}
+							},
+							{
+								"source": {
+									"name": "ARE_DESCRICAO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SUB_AREA"
+								}
+							},
+							{
+								"source": {
+									"name": "LIN_DESCRICAO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "LINHA"
+								}
+							},
+							{
+								"source": {
+									"name": "TPA_DESCRICAO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DESCRICAO_DO_ATO"
+								}
+							},
+							{
+								"source": {
+									"name": "ATO_FUNCIONARIO_ORIENTADO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ABORDAGEM_POSITIVA"
+								}
+							},
+							{
+								"source": {
+									"name": "ATO_ESPECIFIQUE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ESPECIFIQUE"
+								}
+							},
+							{
+								"source": {
+									"name": "BLC_DESCRICAO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "BLOCO"
+								}
+							},
+							{
+								"source": {
+									"name": "ATO_DESCRICAO_EVENTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DESCRICAO_DO_EVENTO"
+								}
+							},
+							{
+								"source": {
+									"name": "ATS_DESCRICAO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "STATUS"
+								}
+							},
+							{
+								"source": {
+									"name": "ATO_QUEM_REPORTOU",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ID_QUEM_REPORTOU"
+								}
+							},
+							{
+								"source": {
+									"name": "JOB_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "JOB_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DENOMINACAO_OBJ",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CARGO_QUEM_REPORTOU"
+								}
+							},
+							{
+								"source": {
+									"name": "ATO_JUSTIFICA_ARQUIVAMENTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "JUSTIFICA_ARQUIVAMENTO"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Segambev_AtosInseguros_DTS",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Segambev_AtosInseguros_DTS",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "Brazil/Mes/CENTRO_TRABALHO_I"
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-07-10T14:02:01Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
